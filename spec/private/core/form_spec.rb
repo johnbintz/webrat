@@ -48,4 +48,22 @@ describe "Multiple nested params" do
     webrat_session.should_receive(:post).with("/family", params)
     click_button
   end
+
+  it "should correctly construct a query string" do
+    Webrat.configuration.mode = :mechanize
+
+    with_html <<-HTML
+      <html>
+        <form method="get" action="/search">
+          <input type="text" name="query" value="my-query" />
+          <input type="submit" />
+        </form>
+      </html>
+    HTML
+
+    params = { "query" => "my-query" }
+
+    webrat_session.should_receive(:get).with("/search", params)
+    click_button
+  end
 end
